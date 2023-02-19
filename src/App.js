@@ -1,20 +1,23 @@
 import Item from "./Item";
 import Category from "./Category";
 import menu from "./data";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+
+let categories = menu.map((item) => item.category);
+categories = ["all", ...new Set(categories)];
 
 function App() {
   const [items, setItems] = useState(menu);
-  let categories = menu.map((item) => item.category);
-  categories = ['all', ...new Set(categories)];
+  const [cats] = useState(categories);
 
-  const setCategory = (catName) => {
+  const setCategory = useCallback((catName) => {
     if (catName === "all") {
       setItems(menu);
     } else {
       setItems(menu.filter((item) => item.category === catName));
     }
-  };
+  }, []);
+
   return (
     <main>
       <section className="menu section">
@@ -22,7 +25,7 @@ function App() {
           <h2>our menu</h2>
           <div className="underline"></div>
         </div>
-        <Category setCategory={setCategory} categories={categories} />
+        <Category setCategory={setCategory} categories={cats} />
         <div className="section-center">
           {items.map((item) => (
             <Item key={item.id} {...item} />
