@@ -1,9 +1,13 @@
 import Item from "./Item";
+import Category from "./Category";
 import menu from "./data";
 import { useState } from "react";
 
 function App() {
   const [items, setItems] = useState(menu);
+  let categories = menu.map((item) => item.category);
+  categories = ['all', ...new Set(categories)];
+
   const setCategory = (catName) => {
     if (catName === "all") {
       setItems(menu);
@@ -18,23 +22,7 @@ function App() {
           <h2>our menu</h2>
           <div className="underline"></div>
         </div>
-        <div className="btn-container">
-          <button className="filter-btn" onClick={() => setCategory("all")}>
-            all
-          </button>
-          <button
-            className="filter-btn"
-            onClick={() => setCategory("breakfast")}
-          >
-            breakfast
-          </button>
-          <button className="filter-btn" onClick={() => setCategory("lunch")}>
-            lunch
-          </button>
-          <button className="filter-btn" onClick={() => setCategory("shakes")}>
-            shakes
-          </button>
-        </div>
+        <Category setCategory={setCategory} categories={categories} />
         <div className="section-center">
           {items.map((item) => (
             <Item key={item.id} {...item} />
